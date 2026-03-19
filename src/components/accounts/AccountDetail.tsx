@@ -637,8 +637,8 @@ export const AccountDetail: React.FC<AccountDetailProps> = ({ accountId, onNavig
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Account Information */}
-        <div className="lg:col-span-1">
+        {/* Left Column - Account Information & Company Overview */}
+        <div className="lg:col-span-1 space-y-6">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Account Information</h3>
@@ -816,7 +816,7 @@ export const AccountDetail: React.FC<AccountDetailProps> = ({ accountId, onNavig
           </div>
 
           {/* Company Overview */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Company Overview</h3>
             </div>
@@ -857,7 +857,7 @@ export const AccountDetail: React.FC<AccountDetailProps> = ({ accountId, onNavig
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Right Column - Email Replies & Activities */}
         <div className="lg:col-span-2 space-y-6">
           {/* Email Replies Section */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -1157,193 +1157,192 @@ export const AccountDetail: React.FC<AccountDetailProps> = ({ accountId, onNavig
               )}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Contacts at Account */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Users className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Contacts</h3>
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    {contacts.length} {contacts.length === 1 ? 'Contact' : 'Contacts'}
-                  </span>
-                  {selectedContactIds.size > 0 && (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      {selectedContactIds.size} Selected
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center space-x-2">
-                  {selectedContactIds.size > 0 && (
-                    <>
-                      <button
-                        onClick={() => handleBulkAction('contact-list')}
-                        className="px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors flex items-center space-x-1"
-                      >
-                        <List className="w-4 h-4" />
-                        <span>Add to Contact List</span>
-                      </button>
-                      <button
-                        onClick={() => handleBulkAction('salesplay')}
-                        className="px-3 py-2 text-sm font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors flex items-center space-x-1"
-                      >
-                        <Play className="w-4 h-4" />
-                        <span>Add to SalesPlay</span>
-                      </button>
-                    </>
-                  )}
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowContactsDropdown(!showContactsDropdown)}
-                      className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
-
-                    {showContactsDropdown && (
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                        <button
-                          onClick={() => {
-                            setShowAddContactModal(true);
-                            setShowContactsDropdown(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
-                        >
-                          <Plus className="w-4 h-4" />
-                          <span>Add Contact</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="p-6">
-              {contacts.length > 0 ? (
-                <>
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left">
-                            <input
-                              type="checkbox"
-                              checked={selectedContactIds.size === contacts.slice(0, 5).length && contacts.length > 0}
-                              onChange={handleSelectAllContacts}
-                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
-                            />
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Contact
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Title
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Last Contacted
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Active SalesPlays
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Replies
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {contacts.slice(0, 5).map((contact) => (
-                          <tr key={contact.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <input
-                                type="checkbox"
-                                checked={selectedContactIds.has(contact.id)}
-                                onChange={() => handleSelectContact(contact.id)}
-                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
-                              />
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center space-x-3">
-                                <div className="p-1 bg-blue-100 rounded-lg">
-                                  <User className="w-4 h-4 text-blue-600" />
-                                </div>
-                                <div>
-                                  <button
-                                    onClick={() => onNavigate('contact-detail', contact.id)}
-                                    className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors"
-                                  >
-                                    {contact.firstName} {contact.lastName}
-                                  </button>
-                                  <div className="text-sm text-gray-500">{contact.email}</div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">
-                                {contact.title || '-'}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">
-                                {contact.lastContacted ? formatDate(contact.lastContacted) : '-'}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center space-x-2">
-                                {contact.activeSalesPlayId ? (
-                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <Play className="w-3 h-3 mr-1" />
-                                    Active
-                                  </span>
-                                ) : (
-                                  <span className="text-gray-400 text-sm">None</span>
-                                )}
-                                {contact.completedSalesPlays && contact.completedSalesPlays.length > 0 && (
-                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {contact.completedSalesPlays.length} Completed
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              {(() => {
-                                const contactReplies = leads.filter(lead =>
-                                  lead.contactId === contact.id && lead.source === 'email_reply'
-                                );
-                                return contactReplies.length > 0 ? (
-                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <MessageSquare className="w-3 h-3 mr-1" />
-                                    {contactReplies.length} {contactReplies.length === 1 ? 'Reply' : 'Replies'}
-                                  </span>
-                                ) : (
-                                  <span className="text-gray-400 text-sm">No replies</span>
-                                );
-                              })()}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <button
-                      onClick={() => onNavigate('account-contacts', accountId)}
-                      className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
-                    >
-                      <List className="w-4 h-4" />
-                      <span>View all contacts ({contacts.length})</span>
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <div className="text-center py-8">
-                  <Users className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-500">No contacts found for this account</p>
-                </div>
+      {/* Contacts at Account - Full Width Below */}
+      <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Users className="w-5 h-5 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Contacts</h3>
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                {contacts.length} {contacts.length === 1 ? 'Contact' : 'Contacts'}
+              </span>
+              {selectedContactIds.size > 0 && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  {selectedContactIds.size} Selected
+                </span>
               )}
             </div>
-          </div>
+            <div className="flex items-center space-x-2">
+              {selectedContactIds.size > 0 && (
+                <>
+                  <button
+                    onClick={() => handleBulkAction('contact-list')}
+                    className="px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors flex items-center space-x-1"
+                  >
+                    <List className="w-4 h-4" />
+                    <span>Add to Contact List</span>
+                  </button>
+                  <button
+                    onClick={() => handleBulkAction('salesplay')}
+                    className="px-3 py-2 text-sm font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors flex items-center space-x-1"
+                  >
+                    <Play className="w-4 h-4" />
+                    <span>Add to SalesPlay</span>
+                  </button>
+                </>
+              )}
+              <div className="relative">
+                <button
+                  onClick={() => setShowContactsDropdown(!showContactsDropdown)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <MoreVertical className="w-5 h-5" />
+                </button>
 
+                {showContactsDropdown && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <button
+                      onClick={() => {
+                        setShowAddContactModal(true);
+                        setShowContactsDropdown(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Contact</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="p-6">
+          {contacts.length > 0 ? (
+            <>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left">
+                        <input
+                          type="checkbox"
+                          checked={selectedContactIds.size === contacts.slice(0, 5).length && contacts.length > 0}
+                          onChange={handleSelectAllContacts}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                        />
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Contact
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Title
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Last Contacted
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Active SalesPlays
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Replies
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {contacts.slice(0, 5).map((contact) => (
+                      <tr key={contact.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <input
+                            type="checkbox"
+                            checked={selectedContactIds.has(contact.id)}
+                            onChange={() => handleSelectContact(contact.id)}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-3">
+                            <div className="p-1 bg-blue-100 rounded-lg">
+                              <User className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <button
+                                onClick={() => onNavigate('contact-detail', contact.id)}
+                                className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                              >
+                                {contact.firstName} {contact.lastName}
+                              </button>
+                              <div className="text-sm text-gray-500">{contact.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {contact.title || '-'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {contact.lastContacted ? formatDate(contact.lastContacted) : '-'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-2">
+                            {contact.activeSalesPlayId ? (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <Play className="w-3 h-3 mr-1" />
+                                Active
+                              </span>
+                            ) : (
+                              <span className="text-gray-400 text-sm">None</span>
+                            )}
+                            {contact.completedSalesPlays && contact.completedSalesPlays.length > 0 && (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                {contact.completedSalesPlays.length} Completed
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {(() => {
+                            const contactReplies = leads.filter(lead =>
+                              lead.contactId === contact.id && lead.source === 'email_reply'
+                            );
+                            return contactReplies.length > 0 ? (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <MessageSquare className="w-3 h-3 mr-1" />
+                                {contactReplies.length} {contactReplies.length === 1 ? 'Reply' : 'Replies'}
+                              </span>
+                            ) : (
+                              <span className="text-gray-400 text-sm">No replies</span>
+                            );
+                          })()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => onNavigate('account-contacts', accountId)}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                >
+                  <List className="w-4 h-4" />
+                  <span>View all contacts ({contacts.length})</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-8">
+              <Users className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-500">No contacts found for this account</p>
+            </div>
+          )}
         </div>
       </div>
 
